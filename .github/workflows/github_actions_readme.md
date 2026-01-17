@@ -1,31 +1,56 @@
-# Flask Practice - GitHub Actions CI/CD
+# 🚀 Flask Application CI/CD with GitHub Actions
 
-This repository demonstrates a CI/CD pipeline for a Flask application using GitHub Actions.
+## 📌 Overview
+This repository demonstrates a **CI/CD pipeline** for a Python Flask application using **GitHub Actions**.  
+The workflow automates:
+- Installing dependencies
+- Running unit tests
+- Building the application
+- Deploying to **staging** and **production** environments
 
-## Workflow
+---
 
-1. **CI (Continuous Integration)**  
-   - Triggered on push to `main` or `staging` branches.  
-   - Installs dependencies, runs tests, and builds the app.
+## 🛠️ Branching Strategy
+- **main** → Production-ready code  
+- **staging** → Testing and staging environment  
 
-2. **Deploy to Staging**  
-   - Triggered on push to `staging` branch.  
-   - Uses secret: `STAGING_API_KEY`.
+---
 
-3. **Deploy to Production**  
-   - Triggered on GitHub release creation.  
-   - Uses secret: `PROD_API_KEY`.
+## ⚙️ Workflow File
+The pipeline is defined in `.github/workflows/ci-cd.yml`.
 
-## Secrets
+### Jobs
+1. **Install Dependencies**  
+   - Sets up Python  
+   - Installs required packages (`requirements.txt`)  
+   - Ensures `pytest` is installed  
 
-Add the following GitHub repository secrets under **Settings → Secrets → Actions**:
+2. **Run Tests**  
+   - Executes the test suite with `pytest`  
+   - Uses a MongoDB service container for database-related tests  
+   - Fails fast if tests do not pass  
 
-- `STAGING_API_KEY` → staging deployment key  
-- `PROD_API_KEY` → production deployment key
+3. **Build**  
+   - Prepares the Flask application for deployment  
 
-## How to Trigger
+4. **Deploy to Staging**  
+   - Triggered on push to the `staging` branch  
+   - Deploys the app to a staging environment  
 
-- **CI:** Push to `main` or `staging`  
-- **Staging Deploy:** Push to `staging`  
-- **Production Deploy:** Create a release via **Releases → Draft a new release → Publish release**
+5. **Deploy to Production**  
+   - Triggered when a **release** is created  
+   - Deploys the app to production  
 
+---
+
+## 🔑 Environment Secrets
+Sensitive information is stored in **GitHub Secrets**.  
+Examples:
+- `MONGO_URI` → MongoDB connection string  
+- `DEPLOY_KEY` → Deployment key for servers  
+- `API_TOKEN` → Token for cloud provider or container registry  
+
+Secrets are referenced in the workflow as:
+```yaml
+env:
+  MONGO_URI: ${{ secrets.MONGO_URI }}
