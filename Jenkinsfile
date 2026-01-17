@@ -6,7 +6,11 @@ pipeline {
             steps {
                 echo 'Installing dependencies...'
                 sh '''
-                python3 -m ensurepip --upgrade || true
+                if ! python3 -m pip --version > /dev/null 2>&1; then
+                    echo "pip not found, bootstrapping..."
+                    curl -s https://bootstrap.pypa.io/get-pip.py -o get-pip.py
+                    python3 get-pip.py
+                fi
                 python3 -m pip install --upgrade pip setuptools wheel
                 python3 -m pip install -r requirements.txt
                 '''
