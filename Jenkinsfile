@@ -6,9 +6,13 @@ pipeline {
             steps {
                 echo 'Setting up virtual environment and installing dependencies...'
                 sh '''
-                # Create venv if missing
-                if [ ! -d "venv" ]; then
-                    python3 -m venv venv || { echo "Failed to create venv. Is python3-venv installed?"; exit 1; }
+                # Try to create venv
+                python3 -m venv venv || { echo "Failed to create venv. Is python3-venv installed?"; exit 1; }
+
+                # Check venv exists
+                if [ ! -f "venv/bin/activate" ]; then
+                    echo "venv/bin/activate not found. Install python3-venv on Jenkins agent."
+                    exit 1
                 fi
 
                 # Activate venv
