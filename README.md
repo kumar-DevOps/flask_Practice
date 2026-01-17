@@ -28,17 +28,13 @@ A simple **Flask** web application to manage student records with **MongoDB** as
 ### 1. Clone the repository
 
 ```bash
-git clone <your-repo-url>
-cd <repo-folder>
+git clone https://github.com/kumar-DevOps/flask_Practice
 ```
 
 ### 2. Create and activate a virtual environment
 
 ```bash
 python -m venv venv
-# Activate venv
-# Windows:
-venv\Scripts\activate
 # Linux / Mac:
 source venv/bin/activate
 ```
@@ -87,7 +83,6 @@ project/
 │   ├── index.html
 │   ├── add_student.html
 │   ├── update_student.html
-│
 ├── app.py
 ├── requirements.txt
 └── .env
@@ -112,22 +107,6 @@ Form pre-filled with student details.
 - <img width="1905" height="897" alt="image" src="https://github.com/user-attachments/assets/04febf01-879f-431f-ab07-abcfb993acf1" />
 
 
-
----
-
-## Notes
-
-* Make sure MongoDB is running and accessible via the URI in `.env`
-* Delete action includes a confirmation page to prevent accidental deletion
-* Uses `ObjectId` from `bson` to work with MongoDB document IDs
-
----
-
-## License
-
-MIT License
-
----
 ## Jenkins CI/CD Pipeline
 
 This project uses a Jenkins CI/CD pipeline executed on a central Jenkins server.
@@ -139,6 +118,7 @@ https://jenkinsacademics.herovired.com/
 1. Build – Install Python dependencies
 2. Test – Run unit tests using pytest
 3. Deploy – Simulated deployment to staging environment
+
 
 
 
