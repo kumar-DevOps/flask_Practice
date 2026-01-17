@@ -6,9 +6,9 @@ pipeline {
             steps {
                 echo 'Setting up virtual environment and installing dependencies...'
                 sh '''
-                # Create virtual environment if not exists
+                # Create venv if missing
                 if [ ! -d "venv" ]; then
-                    python3 -m venv venv
+                    python3 -m venv venv || { echo "Failed to create venv. Is python3-venv installed?"; exit 1; }
                 fi
 
                 # Activate venv
@@ -48,17 +48,9 @@ pipeline {
     post {
         success {
             echo "Build succeeded!"
-            // Uncomment mail step once SMTP is configured
-            // mail to: 'team@example.com',
-            //      subject: "SUCCESS: Jenkins Build #${BUILD_NUMBER}",
-            //      body: "The build succeeded! Check Jenkins for details."
         }
         failure {
             echo "Build failed!"
-            // Uncomment mail step once SMTP is configured
-            // mail to: 'team@example.com',
-            //      subject: "FAILED: Jenkins Build #${BUILD_NUMBER}",
-            //      body: "The build failed. Please check Jenkins logs."
         }
     }
 }
