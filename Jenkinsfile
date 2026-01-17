@@ -4,15 +4,21 @@ pipeline {
     stages {
         stage('Build') {
             steps {
-                echo 'Installing dependencies...'
+                echo 'Setting up virtual environment and installing dependencies...'
                 sh '''
-                if ! python3 -m pip --version > /dev/null 2>&1; then
-                    echo "pip not found, bootstrapping..."
-                    curl -s https://bootstrap.pypa.io/get-pip.py -o get-pip.py
-                    python3 get-pip.py
+                # Create virtual environment if not exists
+                if [ ! -d "venv" ]; then
+                    python3 -m venv venv
                 fi
-                python3 -m pip install --upgrade pip setuptools wheel
-                python3 -m pip install -r requirements.txt
+
+                # Activate venv
+                . venv/bin/activate
+
+                # Upgrade pip inside venv
+                pip install --upgrade pip setuptools wheel
+
+                # Install project dependencies
+                pip install -r requirements.txt
                 '''
             }
         }
@@ -20,7 +26,10 @@ pipeline {
         stage('Test') {
             steps {
                 echo 'Running unit tests...'
-                sh 'pytest tests/ --maxfail=1 --disable-warnings -q'
+                sh '''
+                . venv/bin/activate
+                pytest tests/ --maxfail=1 --disable-warnings -q
+                '''
             }
         }
 
@@ -28,6 +37,7 @@ pipeline {
             steps {
                 echo 'Deploying Flask app to staging...'
                 sh '''
+                . venv/bin/activate
                 pkill -f gunicorn || true
                 nohup gunicorn -w 4 -b 0.0.0.0:8000 app:app &
                 '''
