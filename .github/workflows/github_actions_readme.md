@@ -17,7 +17,7 @@ The workflow automates:
 ---
 
 ## ⚙️ Workflow File
-The pipeline is defined in `.github/workflows/ci-cd.yml`.
+The pipeline is defined in `.github/workflows/python-app.yml`.
 
 ### Jobs
 1. **Install Dependencies**  
