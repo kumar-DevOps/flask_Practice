@@ -14,14 +14,17 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
+
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
           python-version: '3.x'
+
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
+          pip install pytest   # ✅ ensure pytest is installed
 
   run-tests:
     runs-on: ubuntu-latest
@@ -29,6 +32,18 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install pytest
+
       - name: Run tests
         run: pytest --maxfail=1 --disable-warnings -q
 
@@ -38,6 +53,7 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
+
       - name: Build application
         run: echo "Building Flask application..."
 
@@ -47,8 +63,10 @@ jobs:
     needs: build
     steps:
       - name: Deploy to staging
-        run: echo "Deploying to staging environment..."
-        # Add deployment commands here (Docker, Kubernetes, Heroku, etc.)
+        run: |
+          echo "Deploying to staging environment..."
+          # Example: docker build -t flask-app:staging .
+          # Example: docker run -d -p 5000:5000 flask-app:staging
 
   deploy-production:
     if: github.event_name == 'release'
@@ -56,5 +74,7 @@ jobs:
     needs: build
     steps:
       - name: Deploy to production
-        run: echo "Deploying to production environment..."
-        # Add production deployment commands here
+        run: |
+          echo "Deploying to production environment..."
+          # Example: docker build -t flask-app:latest .
+          # Example: docker push <registry>/flask-app:latest
