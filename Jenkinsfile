@@ -5,7 +5,7 @@ pipeline {
         stage('Build') {
             steps {
                 echo 'Installing dependencies...'
-                sh 'pip install -r requirements.txt'
+                sh 'python3 -m pip install -r requirements.txt'
             }
         }
 
@@ -29,14 +29,18 @@ pipeline {
 
     post {
         success {
-            mail to: 'team@example.com',
-                 subject: "SUCCESS: Jenkins Build #${BUILD_NUMBER}",
-                 body: "The build succeeded! Check Jenkins for details."
+            echo "Build succeeded!"
+            // Uncomment mail step once SMTP is configured
+            // mail to: 'team@example.com',
+            //      subject: "SUCCESS: Jenkins Build #${BUILD_NUMBER}",
+            //      body: "The build succeeded! Check Jenkins for details."
         }
         failure {
-            mail to: 'team@example.com',
-                 subject: "FAILED: Jenkins Build #${BUILD_NUMBER}",
-                 body: "The build failed. Please check Jenkins logs."
+            echo "Build failed!"
+            // Uncomment mail step once SMTP is configured
+            // mail to: 'team@example.com',
+            //      subject: "FAILED: Jenkins Build #${BUILD_NUMBER}",
+            //      body: "The build failed. Please check Jenkins logs."
         }
     }
 }
