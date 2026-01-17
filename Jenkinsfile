@@ -5,7 +5,11 @@ pipeline {
         stage('Build') {
             steps {
                 echo 'Installing dependencies...'
-                sh 'python3 -m pip install -r requirements.txt'
+                sh '''
+                python3 -m ensurepip --upgrade || true
+                python3 -m pip install --upgrade pip setuptools wheel
+                python3 -m pip install -r requirements.txt
+                '''
             }
         }
 
